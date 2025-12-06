@@ -1,0 +1,64 @@
+# -------------------------
+# Node Core
+# -------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# -------------------------
+# Environment / Secrets
+# -------------------------
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# Never commit CRM tokens
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# -------------------------
+# Build Output
+# -------------------------
+dist/
+build/
+coverage/
+.tmp/
+.temp/
+.cache/
+
+# -------------------------
+# Logs
+# -------------------------
+logs/
+*.log
+debug.log
+error.log
+
+# -------------------------
+# OS Junk
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# IDE junk
+# -------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.iml
+
+# -------------------------
+# Server specific files
+# -------------------------
+/uploads/
+/temp/
+/runtime/
