@@ -1,5 +1,5 @@
 import axios from "axios";
-import AuthToken from "../models/AuthToken.js";
+import AuthToken from "../models/crmAuthToken.js";
 
 export async function getCRMToken() {
   let existing = await AuthToken.findOne();
