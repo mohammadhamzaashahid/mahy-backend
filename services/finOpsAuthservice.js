@@ -13,8 +13,6 @@ async function fetchNewFinOpsToken() {
   params.append("client_id", process.env.FO_CLIENT_ID);
   params.append("client_secret", process.env.FO_CLIENT_SECRET);
   params.append("resource", process.env.FO_RESOURCE); 
-  // e.g. https://<env>.operations.dynamics.com
-
   const { data } = await axios.post(
     `https://login.microsoftonline.com/${process.env.FO_TENANT_ID}/oauth2/token`,
     params,

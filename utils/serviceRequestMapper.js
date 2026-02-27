@@ -81,7 +81,7 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     }),
 
     ...(data.acSymptoms && {
-      mk_acsymptoms: mapACSymptoms(data.acSymptoms),
+      mk_acsymptoms: mapACSymptoms(data.acSymptoms).toString(),
     }),
 
     mk_acerrorcode: data.acErrorCode,
@@ -105,15 +105,15 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     mk_accidenthistory: !!data.accidentHistory,
 
     ...(data.carSymptoms && {
-      mk_carsymptoms: mapCarSymptoms(data.carSymptoms),
+      mk_carsymptoms: mapCarSymptoms(data.carSymptoms).toString(),
     }),
 
     ...(data.carObservedSigns && {
-      mk_carobservedsigns: mapCarObservedSigns(data.carObservedSigns),
+      mk_carobservedsigns: mapCarObservedSigns(data.carObservedSigns).toString(),
     }),
 
     ...(data.warningLights && {
-      mk_warninglights: mapWarningLights(data.warningLights),
+      mk_warninglights: mapWarningLights(data.warningLights).toString(),
     }),
 
     mk_problemdescription: data.problemDescription,

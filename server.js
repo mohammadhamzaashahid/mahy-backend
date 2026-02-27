@@ -10,6 +10,9 @@ import schemaRoutes from './routes/schemaRoutes.js';
 import dataSyncRoutes from './routes/dataSyncRoutes.js';
 import entitiesRoutes from './routes/entitiesRoutes.js';
 import termsRoutes from './routes/termsRoutes.js';
+import customerRoutes from  "./routes/customer.routes.js"
+import vendorRoutes from "./routes/vendor.routes.js";
+import authRoutes from "./routes/auth.routes.js"
 
 import { getPool } from "./config/mysql.js";
 
@@ -38,6 +41,7 @@ connectMongo();
 })();
 
 app.use("/api/crm", crmRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/forms", complaintRoutes);
 app.use("/api/forms", siteVisitRoutes);
 app.use("/api/forms", serviceRequestRoutes);
@@ -45,6 +49,8 @@ app.use('/api/schema', schemaRoutes);
 app.use('/api/sync', dataSyncRoutes);
 app.use('/api/companies', entitiesRoutes);
 app.use('/api/terms', termsRoutes);
+app.use('/api/',customerRoutes);
+app.use('/api/',vendorRoutes);
 
 app.get("/", (req, res) => {
   res.send("backend is running");
