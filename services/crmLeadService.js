@@ -1,20 +1,7 @@
-import axios from "axios";
-import { getCRMToken } from "./crmAuthService.js";
+import { crmClient } from "./crmClient.js";
 
 export async function createLead(payload) {
-  const token = await getCRMToken();
-
-  const response = await axios.post(
-    `${process.env.CRM_API_BASE}/leads`,
-    payload,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      }
-    }
-  );
+  const response = await crmClient.post("https://mahkhoorydev.crm15.dynamics.com/api/data/v9.2/leads", payload);
 
   return response.data;
 }

@@ -52,7 +52,7 @@ export const mapCustomerToD365Payload = (data, files = []) => {
     pushKey("TRNType", trnTypeValue);
   }
 
-  pushKey("DirPartyBaseType", isOrganization ? 1 : 2);
+  pushKey("DirPartyBaseType", isOrganization ? "Organization" : "Person");
 
   const customerName = isOrganization
     ? data.companyName || data.fullName
