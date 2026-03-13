@@ -13,6 +13,8 @@ import termsRoutes from './routes/termsRoutes.js';
 import customerRoutes from  "./routes/customer.routes.js"
 import vendorRoutes from "./routes/vendor.routes.js";
 import authRoutes from "./routes/auth.routes.js"
+import portalDocumentRoutes from './routes/portalDocument.routes.js'
+import gceoApprovalRoutes from './routes/gceoApproval.routes.js'
 
 import { getPool } from "./config/mysql.js";
 
@@ -41,6 +43,8 @@ connectMongo();
 })();
 
 app.use("/api/crm", crmRoutes);
+app.use("/api/portal/documents", portalDocumentRoutes);
+app.use("/api/gceo", gceoApprovalRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/forms", complaintRoutes);
 app.use("/api/forms", siteVisitRoutes);

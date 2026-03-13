@@ -37,3 +37,80 @@ export async function sendOtpEmail({ to, name, otp }) {
     html,
   });
 }
+
+
+export async function sendDecisionEmail({
+  to,
+  name,
+  referenceNo,
+  status,
+  remarks,
+  downloadUrl
+}) {
+
+  const fromName = process.env.MAIL_FROM_NAME;
+  const fromEmail = process.env.MAIL_FROM_EMAIL || process.env.SMTP_USER;
+
+  const subject =
+    status === "APPROVED"
+      ? `Document Approved - ${referenceNo}`
+      : `Document Rejected - ${referenceNo}`;
+
+  const html = `
+  <div style="font-family:Arial,sans-serif;line-height:1.6">
+
+    <h2>Document ${status}</h2>
+
+    <p>Dear ${name || "User"},</p>
+
+    <p>
+      Your document with reference <b>${referenceNo}</b>
+      has been <b>${status}</b>.
+    </p>
+
+    <p>
+      <b>Remarks from GCEO:</b><br/>
+      ${remarks || "No remarks provided"}
+    </p>
+
+    ${
+      status === "APPROVED"
+        ? `
+      <p>
+        The approved document is now available for download.
+      </p>
+
+      <p>
+        <a href="${downloadUrl}" style="
+          background:#000;
+          color:#fff;
+          padding:10px 16px;
+          text-decoration:none;
+          border-radius:4px;
+        ">
+          Download Approved Document
+        </a>
+      </p>
+      `
+        : `
+      <p>
+        Please review the remarks and upload a corrected document if required.
+      </p>
+      `
+    }
+
+    <p style="margin-top:30px">
+      Regards,<br/>
+      MAHY Portal
+    </p>
+
+  </div>
+  `;
+
+  await mailer.sendMail({
+    from: `"${fromName}" <${fromEmail}>`,
+    to,
+    subject,
+    html,
+  });
+}

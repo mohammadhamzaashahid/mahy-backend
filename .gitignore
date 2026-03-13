@@ -59,6 +59,9 @@ Thumbs.db
 # -------------------------
 # Server specific files
 # -------------------------
-/uploads/
+src/uploads/
 /temp/
 /runtime/
+
+*.png
+*.pdf
