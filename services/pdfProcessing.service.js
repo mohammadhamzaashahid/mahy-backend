@@ -20,7 +20,7 @@ const WATERMARK_CONFIG = {
 };
 
 const buildVerificationUrl = (token) => {
-  return `${process.env.APP_BASE_URL}/verify/${token}`;
+  return `${process.env.APP_BASE_URL}/mahy-portal/employee-portal/verify/${token}`;
 };
 
 export const processDocumentPdf = async ({

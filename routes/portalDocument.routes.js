@@ -1,6 +1,6 @@
 import express from "express";
 
-import { uploadDocument, getMyDocuments, downloadDocument } from "../controllers/portalDocument.controller.js";
+import { uploadDocument, getMyDocuments, downloadDocument, getPublicDocument, verifyDocument } from "../controllers/portalDocument.controller.js";
 import { uploadMiddleware } from "../middlewares/file.upload.middleware.js";
 
 
@@ -16,6 +16,10 @@ router.get(
   "/my",
   getMyDocuments
 );
+
+router.get("/documents/:id", getPublicDocument);
+
+router.get("/verify/:token", verifyDocument);
 
 router.get("/:id/download", downloadDocument);
 

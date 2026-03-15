@@ -64,7 +64,8 @@ export const approveDocument = async (req, res) => {
 
     await createActionLog(id, "APPROVED", user, remarks);
 
-    const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
+    // const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
+const downloadUrl = `${process.env.APP_BASE_URL}/mahy-portal/employee-portal/documents/${id}`;
 
     await sendDecisionEmail({
       to: doc.uploadedByEmail,
@@ -133,8 +134,8 @@ export const rejectDocument = async (req, res) => {
 
     await createActionLog(id, "REJECTED", user, reason);
 
-    const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
-
+    // const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
+const downloadUrl = `${process.env.APP_BASE_URL}/mahy-portal/employee-portal/documents/${id}`;
     await sendDecisionEmail({
       to: doc.uploadedByEmail,
       name: doc.uploadedByName,
@@ -204,8 +205,8 @@ export const bulkApprove = async (req, res) => {
 
       await createActionLog(id, "APPROVED", user, remarks || "Bulk approved");
 
-      const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
-
+      // const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
+const downloadUrl = `${process.env.APP_BASE_URL}/mahy-portal/employee-portal/documents/${id}`;
       await sendDecisionEmail({
         to: doc.uploadedByEmail,
         name: doc.uploadedByName,
@@ -274,8 +275,8 @@ export const bulkReject = async (req, res) => {
 
       await createActionLog(id, "REJECTED", user, reason || "Bulk rejected");
 
-      const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
-
+      // const downloadUrl = `${process.env.APP_BASE_URL}/api/portal/documents/${id}/download`;
+const downloadUrl = `${process.env.APP_BASE_URL}/mahy-portal/employee-portal/documents/${id}`;
       await sendDecisionEmail({
         to: doc.uploadedByEmail,
         name: doc.uploadedByName,

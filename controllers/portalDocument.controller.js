@@ -5,6 +5,7 @@ import { generateReference } from "../utils/documents/generateReference.js";
 import { error, success } from "../utils/response.js";
 import {
   createDocumentRecord,
+  getDocumentById,
   getDocumentsByUser,
 } from "../services/document.service.js";
 import { getPool } from "../config/mysql.js";
@@ -87,6 +88,70 @@ console.log(email);
   }
 };
 
+export const verifyDocument = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const pool = await getPool();
+
+    const [rows] = await pool.query(
+      `
+      SELECT
+        referenceNo,
+        documentType,
+        status,
+        approvedAt,
+        company,
+        department
+      FROM portal_documents
+      WHERE verificationToken = ?
+      LIMIT 1
+      `,
+      [token]
+    );
+
+    if (!rows.length) {
+      return error(res, "Invalid verification token", 404);
+    }
+
+    return success(res, rows[0]);
+
+  } catch (err) {
+    console.error(err);
+    return error(res);
+  }
+};
+
+
+
+export const getPublicDocument = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const doc = await getDocumentById(id);
+
+    if (!doc) {
+      return error(res, "Document not found", 404);
+    }
+
+    return success(res, {
+      id: doc.id,
+      referenceNo: doc.referenceNo,
+      documentType: doc.documentType,
+      status: doc.status,
+      uploadedByEmail: doc.uploadedByEmail,
+      createdAt: doc.createdAt,
+      approvedAt: doc.approvedAt,
+      rejectedAt: doc.rejectedAt
+    });
+
+  } catch (err) {
+    console.error(err);
+    return error(res);
+  }
+};
+
+
 export const downloadDocument = async (req, res) => {
   try {
     const { id } = req.params;
@@ -100,9 +165,17 @@ export const downloadDocument = async (req, res) => {
       [id],
     );
 
+    const doc = rows[0];
+
+
+
     if (!rows.length) {
       return res.status(404).json({ message: "Document not found" });
     }
+
+    if (!doc.processedFilePath && !doc.originalFilePath) {
+  return res.status(404).json({ message: "File not found" });
+}
 
     const filePath = rows[0].processedFilePath || rows[0].originalFilePath;
 
