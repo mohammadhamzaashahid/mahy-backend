@@ -77,6 +77,7 @@ export const getAllDocuments = async (status) => {
     uploadedByEmail,
     department,
     company,
+    description,
     status,
     decisionRemarks,
     approvedAt,

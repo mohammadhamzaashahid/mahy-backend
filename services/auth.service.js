@@ -19,15 +19,31 @@ export async function createPendingUserAndSendOtp({ name, email, password }) {
   try {
     await conn.beginTransaction();
 
-    const [existing] = await conn.query("SELECT id, is_verified FROM users WHERE email = ?", [email]);
+    const [existing] = await conn.query(
+      "SELECT id, name, is_verified FROM users WHERE email = ?",
+      [email]
+    );
     if (existing.length) {
       const user = existing[0];
       if (user.is_verified === 1) {
         return { ok: false, status: 409, message: "Email already registered. Please login." };
       }
 
+      await conn.query("DELETE FROM user_email_otps WHERE user_id = ?", [user.id]);
+
+      const otp = generateOtp();
+      const otpHash = await hashOtp(otp);
+      const expiresAt = nowPlusMinutes(process.env.OTP_EXPIRES_MINUTES || 10);
+
+      await conn.query(
+        "INSERT INTO user_email_otps (user_id, otp_hash, expires_at, attempts_left) VALUES (?, ?, ?, 5)",
+        [user.id, otpHash, expiresAt]
+      );
+
       await conn.commit();
-      return { ok: true, status: 200, message: "Account exists but not verified. Use resend OTP." };
+
+      await sendOtpEmail({ to: email, name: user.name, otp });
+      return { ok: true, status: 200, message: "OTP resent to registered email." };
     }
 
     const [ins] = await conn.query(

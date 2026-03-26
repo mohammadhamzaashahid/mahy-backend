@@ -5,20 +5,47 @@ export async function createCustomerComplaint(req, res) {
   try {
     const formData = req.body;
 
-    const crmPayload = mapCustomerComplaintToCrm(formData);
+    const { crmPayload, attachments } = mapCustomerComplaintToCrm(
+      formData,
+      req.files ?? req.file
+    );
 
     console.log("payload", crmPayload);
     
-    const { data, headers } = await crmClient.post("https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/mah_customercomplains", crmPayload);
+    const { data, headers } = await crmClient.post(
+      "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/mah_customercomplains",
+      crmPayload
+    );
 
     console.log(data);
 
-    const entityId = headers?.["odata-entityid"] || null;
+    const entityUrl =
+      headers?.["odata-entityid"] || headers?.["OData-EntityId"] || null;
+    const recordId = entityUrl ? entityUrl.match(/\(([^)]+)\)/)?.[1] : null;
+
+    if (recordId && attachments.length) {
+      for (const file of attachments) {
+        const cleanBase64 = file.base64.replace(/^data:.*;base64,/, "");
+
+        await crmClient.post(
+          "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/annotations",
+          {
+            subject: "Customer Complaint Attachment",
+            filename: file.fileName,
+            mimetype: file.mimeType,
+            documentbody: cleanBase64,
+            objecttypecode: "mah_customercomplain",
+            "objectid_mah_customercomplain@odata.bind":
+              `/mah_customercomplains(${recordId})`,
+          }
+        );
+      }
+    }
 
     return res.status(201).json({
       success: true,
       message: "Complaint created in CRM",
-      entityId,
+      entityId: entityUrl,
       crmResponse: data ?? null,
       sentPayload: crmPayload,
     });

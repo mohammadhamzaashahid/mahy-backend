@@ -102,7 +102,8 @@ export const verifyDocument = async (req, res) => {
         status,
         approvedAt,
         company,
-        department
+        department,
+        uploadedByEmail
       FROM portal_documents
       WHERE verificationToken = ?
       LIMIT 1

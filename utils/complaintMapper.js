@@ -1,14 +1,16 @@
-export function mapCustomerComplaintToCrm(form) {
+import { encodeFileToBase64 } from "./uploadHelper.js";
+
+export function mapCustomerComplaintToCrm(form, files = []) {
   const orgPersonMap = {
     Organization: 124620000,
     Person: 124620001,
   };
 
   const source2Map = {
-    phone: 809880000,
-    email: 809880001,  
+    phone: 809880003,
+    email: 809880003,  
     website: 809880003,
-    "walk-in": 809880002, 
+    "walk-in": 809880003, 
     whatsapp: 809880002, 
   };
 
@@ -106,5 +108,33 @@ export function mapCustomerComplaintToCrm(form) {
     if (payload[k] === null || payload[k] === undefined) delete payload[k];
   });
 
-  return payload;
+  const isMulterFile = (file) =>
+    file &&
+    typeof file === "object" &&
+    "originalname" in file &&
+    "buffer" in file;
+
+  const normalizeFiles = (input) => {
+    if (!input) return [];
+    if (Array.isArray(input)) {
+      return input.reduce(
+        (acc, item) => acc.concat(normalizeFiles(item)),
+        []
+      );
+    }
+    if (isMulterFile(input)) return [input];
+    if (typeof input === "object") {
+      return Object.values(input).reduce(
+        (acc, value) => acc.concat(normalizeFiles(value)),
+        []
+      );
+    }
+    return [];
+  };
+
+  const attachments = normalizeFiles(files).map((file) =>
+    encodeFileToBase64(file)
+  );
+
+  return { crmPayload: payload, attachments };
 }
