@@ -13,7 +13,7 @@ export const createSiteVisit = async (req, res) => {
       recordId,
     });
   } catch (error) {
-    console.error("SITE VISIT ERROR:", error?.response?.data || error);
+    console.error("Site visit request error", error?.response?.data || error);
 
     return res.status(500).json({
       success: false,

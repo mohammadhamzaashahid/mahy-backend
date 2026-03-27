@@ -5,7 +5,7 @@ export const createServiceRequestInCRM = async (
   attachments = []
 ) => {
   const response = await crmClient.post(
-    "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/mk_servicerequests",
+    `${process.env.CRM_ENV_RESOURCE}/mk_servicerequests`,
     payload
   );
 
@@ -23,7 +23,7 @@ export const createServiceRequestInCRM = async (
     const cleanBase64 = file.base64.replace(/^data:.*;base64,/, "");
 
     await crmClient.post(
-      "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/annotations",
+    `${process.env.CRM_ENV_RESOURCE}/annotations`,
       {
         subject: "Service Request Attachment",
         filename: file.fileName,

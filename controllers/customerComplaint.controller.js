@@ -13,7 +13,7 @@ export async function createCustomerComplaint(req, res) {
     console.log("payload", crmPayload);
     
     const { data, headers } = await crmClient.post(
-      "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/mah_customercomplains",
+      `${process.env.CRM_ENV_RESOURCE}/mah_customercomplains`,
       crmPayload
     );
 
@@ -28,7 +28,7 @@ export async function createCustomerComplaint(req, res) {
         const cleanBase64 = file.base64.replace(/^data:.*;base64,/, "");
 
         await crmClient.post(
-          "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/annotations",
+          `${process.env.CRM_ENV_RESOURCE}/annotations`,
           {
             subject: "Customer Complaint Attachment",
             filename: file.fileName,

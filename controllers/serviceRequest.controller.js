@@ -13,18 +13,18 @@ export const createServiceRequest = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Service request created successfully",
+      message: "service request created successfully",
       recordId,
     });
   } catch (error) {
     console.error(
-      "SERVICE REQUEST ERROR:",
+      "service req error",
       error?.response?.data || error
     );
 
     res.status(500).json({
       success: false,
-      message: "Failed to create service request",
+      message: "failed to create service request",
     });
   }
 };

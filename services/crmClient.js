@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCRMToken } from "./crmToken.service.js";
 
 export const crmClient = axios.create({
-  baseURL: process.env.CRM_API_BASE,
+  baseURL: process.env.CRM_ENV_RESOURCE,
   headers: {
     "Content-Type": "application/json",
     "OData-MaxVersion": "4.0",

@@ -2,7 +2,7 @@ import { crmClient } from "./crmClient.js";
 
 export const createSiteVisitInCRM = async (payload, attachments = []) => {
   const response = await crmClient.post(
-    "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/mah_sitevisitdetails",
+    `${process.env.CRM_ENV_RESOURCE}/mah_sitevisitdetails`,
     payload
   );
 
@@ -20,7 +20,7 @@ export const createSiteVisitInCRM = async (payload, attachments = []) => {
     const cleanBase64 = file.base64.replace(/^data:.*;base64,/, "");
 
     await crmClient.post(
-      "https://mahkhoorydev.api.crm15.dynamics.com/api/data/v9.2/annotations",
+    `${process.env.CRM_ENV_RESOURCE}/annotations`,
       {
         subject: "Site Visit Attachment",
         filename: file.fileName,

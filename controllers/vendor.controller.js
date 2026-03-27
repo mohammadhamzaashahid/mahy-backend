@@ -16,14 +16,14 @@ export const createVendor = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: "Customer request submitted successfully",
+      message: "vendor request submitted successfully",
       data: response,
     });
   } catch (error) {
-    console.error("D365 CUSTOMER CREATE ERROR:", error?.response?.data || error);
+    console.error("D365 vend request error", error?.response?.data || error);
     return res.status(500).json({
       success: false,
-      message: "Failed to create customer",
+      message: "Failed to create vendor",
       error: error?.response?.data || error.message,
     });
   }
