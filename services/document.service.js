@@ -10,7 +10,7 @@ export const createDocumentRecord = async (data) => {
     (
       documentUuid,
       documentType,
-
+      userReferenceNo,
       amount,
       description,
       severity,
@@ -27,7 +27,7 @@ export const createDocumentRecord = async (data) => {
       department,
       company
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
     data
   );
@@ -45,6 +45,7 @@ export const getDocumentsByUser = async (email) => {
       id,
       referenceNo,
       documentType,
+      userReferenceNo,
       amount,
       severity,
       urgency,
@@ -71,6 +72,7 @@ export const getAllDocuments = async (status) => {
     id,
     referenceNo,
     documentType,
+    userReferenceNo,
     amount,
     severity,
     urgency,
@@ -82,7 +84,8 @@ export const getAllDocuments = async (status) => {
     decisionRemarks,
     approvedAt,
     rejectedAt,
-    createdAt
+    createdAt,
+    remarks
   FROM portal_documents
   `;
 

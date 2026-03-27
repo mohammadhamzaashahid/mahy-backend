@@ -21,6 +21,7 @@ export const uploadDocument = async (req, res) => {
     const {
       documentType,
       amount,
+      userReferenceNo,
       description,
       severity,
       urgency,
@@ -34,6 +35,7 @@ export const uploadDocument = async (req, res) => {
     const insertId = await createDocumentRecord([
       documentUuid,
       documentType,
+      userReferenceNo,
 
       amount || null,
       description || null,
