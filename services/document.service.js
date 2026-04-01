@@ -42,18 +42,7 @@ export const getDocumentsByUser = async (email) => {
   const [rows] = await pool.query(
     `
     SELECT
-      id,
-      referenceNo,
-      documentType,
-      userReferenceNo,
-      amount,
-      severity,
-      urgency,
-      status,
-      decisionRemarks,
-      createdAt,
-      approvedAt,
-      rejectedAt
+      *
     FROM portal_documents
     WHERE uploadedByEmail = ?
     ORDER BY createdAt DESC
@@ -64,40 +53,102 @@ export const getDocumentsByUser = async (email) => {
   return rows;
 };
 
-export const getAllDocuments = async (status) => {
+export const getAllDocuments = async ({ status, page = 1, limit = 10 }) => {
   const pool = await getPool();
 
-  let sql = `
-  SELECT
-    id,
-    referenceNo,
-    documentType,
-    userReferenceNo,
-    amount,
-    severity,
-    urgency,
-    uploadedByEmail,
-    department,
-    company,
-    description,
-    status,
-    decisionRemarks,
-    approvedAt,
-    rejectedAt,
-    createdAt,
-    remarks
-  FROM portal_documents
+  const offset = (page - 1) * limit;
+
+  let baseQuery = `
+    FROM portal_documents
   `;
 
+  let whereClause = "";
+  let params = [];
+
   if (status) {
-    sql += ` WHERE status = ?`;
+    whereClause = ` WHERE status = ?`;
+    params.push(status);
   }
 
-  sql += ` ORDER BY createdAt DESC`;
+  const countSql = `SELECT COUNT(*) as total ${baseQuery} ${whereClause}`;
+  const [countResult] = await pool.query(countSql, params);
+  const total = countResult[0]?.total || 0;
 
-  const [rows] = await pool.query(sql, status ? [status] : []);
-  return rows;
+  const dataSql = `
+    SELECT
+      id,
+      referenceNo,
+      documentType,
+      userReferenceNo,
+      amount,
+      severity,
+      urgency,
+      uploadedByEmail,
+      department,
+      company,
+      description,
+      status,
+      decisionRemarks,
+      approvedAt,
+      rejectedAt,
+      createdAt,
+      remarks
+    ${baseQuery}
+    ${whereClause}
+    ORDER BY createdAt DESC
+    LIMIT ? OFFSET ?
+  `;
+
+  const [rows] = await pool.query(dataSql, [...params, Number(limit), Number(offset)]);
+
+  return {
+    data: rows,
+    pagination: {
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / limit),
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
+    },
+  };
 };
+
+//without pagination old code
+// export const getAllDocuments = async (status) => {
+//   const pool = await getPool();
+
+//   let sql = `
+//   SELECT
+//     id,
+//     referenceNo,
+//     documentType,
+//     userReferenceNo,
+//     amount,
+//     severity,
+//     urgency,
+//     uploadedByEmail,
+//     department,
+//     company,
+//     description,
+//     status,
+//     decisionRemarks,
+//     approvedAt,
+//     rejectedAt,
+//     createdAt,
+//     remarks
+//   FROM portal_documents
+//   `;
+
+//   if (status) {
+//     sql += ` WHERE status = ?`;
+//   }
+
+//   sql += ` ORDER BY createdAt DESC`;
+
+//   const [rows] = await pool.query(sql, status ? [status] : []);
+//   return rows;
+// };
 
 
 export const updateDocumentStatus = async (id, status, actionUser) => {

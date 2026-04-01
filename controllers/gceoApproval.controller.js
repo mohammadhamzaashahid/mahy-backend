@@ -12,15 +12,20 @@ import { processDocumentPdf } from "../services/pdfProcessing.service.js";
 
 export const listDocuments = async (req, res) => {
   try {
-    const { status } = req.query;
-    const docs = await getAllDocuments(status);
-    return success(res, docs);
+    const { status, page = 1, limit = 10 } = req.query;
+
+    const result = await getAllDocuments({
+      status,
+      page: Number(page),
+      limit: Number(limit),
+    });
+
+    return success(res, result);
   } catch (err) {
     console.error(err);
     return error(res);
   }
 };
-
 
 
 export const approveDocument = async (req, res) => {
