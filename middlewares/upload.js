@@ -17,6 +17,7 @@ export const upload = multer({
       "audio/mpeg",
       "audio/wav",
       "audio/mp4",
+      "application/pdf",
     ];
 
     if (!allowedTypes.includes(file.mimetype)) {
