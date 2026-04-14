@@ -33,6 +33,20 @@ export const getCurrencies = async (req, res) => {
   }
 };
 
+export const getCustomerGroups = async (req, res) => {
+  try {
+    const pool = await getPool();
+    const rows = await queryWithCompanyFilter(pool, "CustomerGroups", req);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("error fetching Customer Groups", error);
+    res.status(error.statusCode || 500).json({
+      message: "error fetching Customer Groups",
+      error: error.message,
+    });
+  }
+};
+
 export const getDeliveryTerms = async (req, res) => {
   try {
     const pool = await getPool();
@@ -122,4 +136,3 @@ export const getZipCodes = async (req, res) => {
     });
   }
 };
-
