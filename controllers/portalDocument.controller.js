@@ -9,6 +9,7 @@ import {
   getDocumentsByUser,
 } from "../services/document.service.js";
 import { getPool } from "../config/mysql.js";
+import { log } from "console";
 
 export const uploadDocument = async (req, res) => {
   try {
@@ -21,7 +22,7 @@ export const uploadDocument = async (req, res) => {
     const {
       documentType,
       amount,
-      userReferenceNo,
+      referenceNo,
       description,
       severity,
       urgency,
@@ -30,12 +31,15 @@ export const uploadDocument = async (req, res) => {
       department,
       company,
     } = req.body;
+
+    console.log(referenceNo);
+    
     const documentUuid = crypto.randomUUID();
 
     const insertId = await createDocumentRecord([
       documentUuid,
       documentType,
-      userReferenceNo,
+      referenceNo,
 
       amount || null,
       description || null,

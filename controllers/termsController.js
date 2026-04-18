@@ -136,3 +136,55 @@ export const getZipCodes = async (req, res) => {
     });
   }
 };
+
+export const getCitiesByCountry = async (req, res) => {
+  try {
+    const { country } = req.query; 
+
+    if (!country) {
+      return res.status(400).json({
+        message: "country parameter is required",
+      });
+    }
+
+    const pool = await getPool();
+
+    const [rows] = await pool.query(
+      `
+      SELECT 
+       *
+      FROM addresscities c
+      INNER JOIN addresscountryregions cr 
+        ON c.CountryRegionId = cr.CountryRegion
+      WHERE cr.CountryRegion = ?
+      ORDER BY c.Name ASC
+      `,
+      [country]
+    );
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("error fetching cities by country:", error);
+    res.status(500).json({
+      message: "error fetching cities by country",
+      error: error.message,
+    });
+  }
+};
+
+export const getAddressCountries = async (req, res) => {
+  try{
+    const pool = await getPool();
+    const [rows] = await pool.query("SELECT * FROM addresscountryregions");
+
+    res.status(200).json(rows);
+
+  }
+  catch(error){
+    console.error("error fetching countries", error);
+    res.status(500).json({
+      message: "error fetching countries",
+      error: error.message,
+    })
+  }
+}

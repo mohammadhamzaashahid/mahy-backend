@@ -43,10 +43,10 @@ export const mapVendorToD365Payload = (data, files = []) => {
 
   const isOrganization = data.vendorType === "organization";
   const isPerson = data.vendorType === "person";
-  const isUAE = data.countryRegion === "UAE";
+  // const isUAE = data.countryRegion === "UAE";
+  const isUAE = data.countryRegion === "ARE";
 
-  pushKey("DirPartyBaseType", isOrganization ? 1 : 2);
-
+  pushKey("DirPartyBaseType", isOrganization ? "Organization" : "Person");
   if (isOrganization) {
     pushKey("Name", data.companyName);
   } else {
@@ -69,6 +69,10 @@ export const mapVendorToD365Payload = (data, files = []) => {
   pushKey("PaymMode", data.methodOfPayment);
   pushKey("DlvTerm", data.deliveryTerms);
   pushKey("DlvMode", data.deliveryMode);
+
+  pushKey("FirstName", data.firstName);
+  pushKey("MiddleName", data.middleName);
+  pushKey("LastName", data.lastName);
 
   pushKey("TaxGroup", data.salesTaxGroup);
   pushKey("VATNum", data.taxExemptNumber);

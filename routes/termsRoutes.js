@@ -8,9 +8,10 @@ import {
   getCustomerPaymentMethods,
   getLineOfBusiness,
   getZipCodes,
-  getCustomerGroups
+  getCustomerGroups,
+  getAddressCountries,
+  getCitiesByCountry
 } from "../controllers/termsController.js";
-import { RemovePageFromEmptyDocumentError } from "pdf-lib";
 
 const router = express.Router();
 
@@ -23,5 +24,7 @@ router.get('/cust-groups', getCustomerGroups);
 router.get('/customer-payment-methods', getCustomerPaymentMethods);
 router.get('/line-of-business', getLineOfBusiness);
 router.get('/zip-codes',getZipCodes);
+router.get('/countries', getAddressCountries);
+router.get("/cities", getCitiesByCountry);
 
 export default router;

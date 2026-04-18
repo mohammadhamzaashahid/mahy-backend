@@ -38,7 +38,9 @@ export const mapCustomerToD365Payload = (data, files = []) => {
 
   const isOrganization = data.customerType === "organization";
   const isPerson = data.customerType === "individual";
-  const isUAE = data.country === "UAE";
+  // const isUAE = data.country === "UAE";
+
+  const isUAE = data.country === "ARE";
 
   // const hasTRN = data.trnType === 'with_trn';
 
@@ -59,6 +61,10 @@ export const mapCustomerToD365Payload = (data, files = []) => {
     : data.fullName || data.companyName;
 
   pushKey("Name", customerName);
+  pushKey("FirstName", data.firstName);
+  pushKey("MiddleName", data.middleName);
+  pushKey("LastName", data.lastName);
+  pushKey("LastNamePrefix", data.lastNamePrefix);
 
   pushKey("CustClassificationId", data.classificationGroup);
   pushKey("CustGroup", data.customerGroup);
