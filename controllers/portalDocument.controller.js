@@ -78,18 +78,39 @@ export const uploadDocument = async (req, res) => {
   }
 };
 
+// export const getMyDocuments = async (req, res) => {
+//   try {
+
+//     const email = req.query.email;
+//     console.log(email);
+
+//     const docs = await getDocumentsByUser(email);
+
+//     return success(res, docs);
+//   } catch (err) {
+//     console.error(err);
+
+//     return error(res);
+//   }
+// };
+
 export const getMyDocuments = async (req, res) => {
   try {
+    const { email, page = 1, limit = 10 } = req.query;
 
-    const email = req.query.email;
-console.log(email);
+    if (!email) {
+      return error(res, "Email is required", 400);
+    }
 
-    const docs = await getDocumentsByUser(email);
+    const docs = await getDocumentsByUser({
+      email,
+      page: Number(page),
+      limit: Number(limit),
+    });
 
     return success(res, docs);
   } catch (err) {
     console.error(err);
-
     return error(res);
   }
 };

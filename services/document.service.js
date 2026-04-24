@@ -35,9 +35,24 @@ export const createDocumentRecord = async (data) => {
   return result.insertId;
 };
 
-
-export const getDocumentsByUser = async (email) => {
+export const getDocumentsByUser = async ({
+  email,
+  page = 1,
+  limit = 10,
+}) => {
   const pool = await getPool();
+
+  const offset = (page - 1) * limit;
+  const [countResult] = await pool.query(
+    `
+    SELECT COUNT(*) as total
+    FROM portal_documents
+    WHERE uploadedByEmail = ?
+    `,
+    [email]
+  );
+
+  const total = countResult[0]?.total || 0;
 
   const [rows] = await pool.query(
     `
@@ -46,12 +61,41 @@ export const getDocumentsByUser = async (email) => {
     FROM portal_documents
     WHERE uploadedByEmail = ?
     ORDER BY createdAt DESC
+    LIMIT ? OFFSET ?
     `,
-    [email]
+    [email, Number(limit), Number(offset)]
   );
 
-  return rows;
+  return {
+    data: rows,
+    pagination: {
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / limit),
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
+    },
+  };
 };
+
+
+// export const getDocumentsByUser = async (email) => {
+//   const pool = await getPool();
+
+//   const [rows] = await pool.query(
+//     `
+//     SELECT
+//       *
+//     FROM portal_documents
+//     WHERE uploadedByEmail = ?
+//     ORDER BY createdAt DESC
+//     `,
+//     [email]
+//   );
+
+//   return rows;
+// };
 
 export const getAllDocuments = async ({ status, page = 1, limit = 10 }) => {
   const pool = await getPool();
@@ -73,6 +117,10 @@ export const getAllDocuments = async ({ status, page = 1, limit = 10 }) => {
   const countSql = `SELECT COUNT(*) as total ${baseQuery} ${whereClause}`;
   const [countResult] = await pool.query(countSql, params);
   const total = countResult[0]?.total || 0;
+
+const totalAllSql = `SELECT COUNT(*) as total FROM portal_documents`;
+const [totalAllResult] = await pool.query(totalAllSql);
+const totalAll = totalAllResult[0]?.total || 0;
 
   const dataSql = `
     SELECT
@@ -105,6 +153,7 @@ export const getAllDocuments = async ({ status, page = 1, limit = 10 }) => {
     data: rows,
     pagination: {
       total,
+      totalAll,
       page: Number(page),
       limit: Number(limit),
       totalPages: Math.ceil(total / limit),
