@@ -53,6 +53,13 @@ export async function createCustomerComplaint(req, res) {
     const crmError = err || null;
     const status = err?.response?.status || 500;
 
+    console.error("Customer Complaint CRM Error:", {
+      message: err?.message,
+      status,
+      responseData: err?.response?.data ?? null,
+      responseHeaders: err?.response?.headers ?? null,
+    });
+
     return res.status(status).json({
       success: false,
       message: "Failed to create complaint in CRM",

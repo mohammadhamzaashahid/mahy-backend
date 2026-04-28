@@ -57,6 +57,21 @@ export const mapPumpObservedSigns = (value) => {
   return map[value];
 };
 
+// Pump Suspected Area
+export const mapPumpSuspectedArea = (value) => {
+  const map = {
+    motor: 124620000,
+    impeller: 124620001,
+    seal: 124620002,
+    bearing: 124620003,
+    panel: 124620004,
+    electrical: 124620005,
+    piping: 124620006,
+    not_sure: 124620007,
+  };
+  return map[value?.toLowerCase?.()];
+};
+
 // AC Symptoms
 export const mapACSymptoms = (value) => {
   const map = {
@@ -68,6 +83,19 @@ export const mapACSymptoms = (value) => {
     ice: 124620005,
   };
   return map[value];
+};
+
+// AC Fault Area
+export const mapACFaultArea = (value) => {
+  const map = {
+    compressor: 124620000,
+    pcb: 124620001,
+    gas: 124620002,
+    fan_motor: 124620003,
+    sensor: 124620004,
+    drain: 124620005,
+  };
+  return map[value?.toLowerCase?.()];
 };
 
 // Car Symptoms
@@ -139,6 +167,93 @@ export const mapBusinessImpact = (value) => {
     comfort_only: 124620003,
   };
   return map[value];
+};
+
+// Contract Type
+export const mapContractType = (value) => {
+  const map = {
+    amc: 124620000,
+    warranty: 124620001,
+    chargeable: 124620002,
+  };
+  return map[value?.toLowerCase?.()];
+};
+
+// Vehicle Type
+export const mapVehicleType = (value) => {
+  const map = {
+    sedan: 124620000,
+    suv: 124620001,
+    pickup: 124620002,
+    van: 124620003,
+    truck: 124620004,
+  };
+  return map[value?.toLowerCase?.()];
+};
+
+// Fuel Type
+export const mapFuelType = (value) => {
+  const map = {
+    petrol: 124620000,
+    diesel: 124620001,
+    electric: 124620002,
+    hybrid: 124620003,
+  };
+  return map[value?.toLowerCase?.()];
+};
+
+// Car Brand
+export const mapCarBrand = (value) => {
+  const map = {
+    toyota: 124620000,
+    nissan: 124620001,
+    bmw: 124620002,
+    mercedes: 124620003,
+    audi: 124620004,
+    ford: 124620005,
+    other: 124620006,
+  };
+  return map[value?.toLowerCase?.()];
+};
+
+// Noise Location
+export const mapNoiseLocation = (value) => {
+  const map = {
+    engine: 124620000,
+    front_wheels: 124620001,
+    rear_wheels: 124620002,
+    underbody: 124620003,
+    exhaust: 124620004,
+  };
+  return map[value?.toLowerCase?.()];
+};
+
+// Car Suspected Area
+export const mapCarSuspectedArea = (value) => {
+  const map = {
+    engine: 124620000,
+    transmission: 124620001,
+    battery: 124620002,
+    electrical: 124620003,
+    brakes: 124620004,
+    suspension: 124620005,
+    steering: 124620006,
+    cooling_system: 124620007,
+    fuel_system: 124620008,
+    ac_system: 124620009,
+    exhaust: 124620010,
+    not_sure: 124620011,
+  };
+  return map[value?.toLowerCase?.()];
+};
+
+// Transmission
+export const mapTransmission = (value) => {
+  const map = {
+    automatic: 124620000,
+    manual: 124620001,
+  };
+  return map[value?.toLowerCase?.()];
 };
 
 // Preferred Visit

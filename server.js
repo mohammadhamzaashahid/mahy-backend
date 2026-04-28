@@ -15,6 +15,7 @@ import vendorRoutes from "./routes/vendor.routes.js";
 import authRoutes from "./routes/auth.routes.js"
 import portalDocumentRoutes from './routes/portalDocument.routes.js'
 import gceoApprovalRoutes from './routes/gceoApproval.routes.js'
+import contactRoutes from "./routes/contact.routes.js";
 
 import { getPool } from "./config/mysql.js";
 
@@ -55,7 +56,7 @@ app.use('/api/companies', entitiesRoutes);
 app.use('/api/terms', termsRoutes);
 app.use('/api/',customerRoutes);
 app.use('/api/',vendorRoutes);
-
+app.use("/api/", contactRoutes);
 app.get("/", (req, res) => {
   res.send("backend is running");
 });

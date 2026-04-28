@@ -31,6 +31,7 @@ export const sendGraphEmail = async ({ to, subject, html }) => {
     },
     saveToSentItems: true,
   };
+console.log(payload);
 
   const response = await fetch(url, {
     method: "POST",

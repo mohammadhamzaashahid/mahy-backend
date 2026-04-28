@@ -5,9 +5,18 @@ import {
   mapUrgency,
   mapPreferredVisit,
   mapBusinessImpact,
+  mapContractType,
+  mapVehicleType,
+  mapFuelType,
+  mapCarBrand,
+  mapNoiseLocation,
+  mapCarSuspectedArea,
+  mapTransmission,
   mapPumpSymptoms,
   mapPumpObservedSigns,
+  mapPumpSuspectedArea,
   mapACSymptoms,
+  mapACFaultArea,
   mapCarSymptoms,
   mapCarObservedSigns,
   mapWarningLights,
@@ -20,6 +29,12 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     if (value === undefined || value === null || value === "") return undefined;
     const num = Number(value);
     return Number.isFinite(num) ? num : undefined;
+  };
+
+  const toBoolean = (value) => {
+    if (value === true || value === "true") return true;
+    if (value === false || value === "false") return false;
+    return !!value;
   };
 
   const crmPayload = {
@@ -39,7 +54,7 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     mk_brand: data.brand,
     mk_model: data.model,
     mk_assettag: data.assetTag,
-    mk_warrantystatus: !!data.warrantyStatus,
+    mk_warrantystatus: toBoolean(data.warrantyStatus),
 
     ...(data.installationDate && {
       mk_installationdate: data.installationDate,
@@ -49,6 +64,10 @@ export const mapServiceRequestPayload = (data, files = {}) => {
       mk_contractexpiry: data.contractExpiry,
     }),
 
+    ...(data.contractType && {
+      mk_contracttype: mapContractType(data.contractType),
+    }),
+
     ...(data.pumpSymptoms && {
       mk_pumpsymptoms: mapPumpSymptoms(data.pumpSymptoms).toString(),
     }),
@@ -56,9 +75,12 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     ...(data.pumpObservedSigns && {
       mk_pumpobservedsigns: mapPumpObservedSigns(data.pumpObservedSigns).toString(),
     }),
+    ...(data.pumpSuspectedArea && {
+      mk_pumpsuspectedarea: mapPumpSuspectedArea(data.pumpSuspectedArea),
+    }),
 
-    mk_pumprecentservice: !!data.pumpRecentService,
-    mk_powerissue: !!data.pumpPowerIssue,
+    mk_pumprecentservice: toBoolean(data.pumpRecentService),
+    mk_powerissue: toBoolean(data.pumpPowerIssue),
 
     // ...(data.suctionPressure !== undefined && {
     //   mk_suctionpressure: data.suctionPressure,
@@ -83,8 +105,11 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     ...(data.acSymptoms && {
       mk_acsymptoms: mapACSymptoms(data.acSymptoms).toString(),
     }),
+    ...((data.faultArea || data.acFaultArea) && {
+      mk_faultarea: mapACFaultArea(data.faultArea ?? data.acFaultArea),
+    }),
 
-    mk_acerrorcode: data.acErrorCode,
+    mk_acerrorcode: data.acErrorCode ?? data.carErrorCode,
     mk_compressorrunning: !!data.compressorRunning,
     mk_fanrunning: !!data.fanRunning,
     mk_airflowweak: !!data.airflowWeak,
@@ -98,11 +123,41 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     }),
 
     mk_platenumber: data.plateNumber,
+    ...(data.vehicleType && {
+      mk_vehicletype: mapVehicleType(data.vehicleType),
+    }),
+    ...(data.carBrand && {
+      mk_carbrand: mapCarBrand(data.carBrand),
+    }),
     mk_carmodel: data.carModel,
+    ...(data.mileage !== undefined && {
+      mk_mileagekm: toDecimal(data.mileage),
+    }),
+    ...(data.fuelType && {
+      mk_fuellevel: mapFuelType(data.fuelType),
+    }),
+    ...(data.fuelType && {
+      mk_fueltype: mapFuelType(data.fuelType),
+    }),
     mk_vinnumber: data.vinNumber,
-    mk_enginestarts: !!data.engineStarts,
-    mk_carrecentservice: !!data.carRecentService,
-    mk_accidenthistory: !!data.accidentHistory,
+    mk_enginestarts: toBoolean(data.engineStarts),
+    ...(data.engineTemperature !== undefined && {
+      mk_enginetemperature: toDecimal(data.engineTemperature),
+    }),
+    ...(data.batteryVoltage !== undefined && {
+      mk_batteryvoltage: toDecimal(data.batteryVoltage),
+    }),
+    mk_carrecentservice: toBoolean(data.carRecentService),
+    mk_accidenthistory: toBoolean(data.accidentHistory),
+    ...(data.noiseLocation && {
+      mk_noiselocation: mapNoiseLocation(data.noiseLocation),
+    }),
+    ...(data.carSuspectedArea && {
+      mk_carsuspectedarea: mapCarSuspectedArea(data.carSuspectedArea),
+    }),
+    ...(data.transmission && {
+      mk_transmission: mapTransmission(data.transmission),
+    }),
 
     ...(data.carSymptoms && {
       mk_carsymptoms: mapCarSymptoms(data.carSymptoms).toString(),
@@ -116,7 +171,8 @@ export const mapServiceRequestPayload = (data, files = {}) => {
       mk_warninglights: mapWarningLights(data.warningLights).toString(),
     }),
 
-    mk_problemdescription: data.problemDescription,
+    mk_year: data.carYear,
+    mk_carproblemdescription: data.problemDescription,
     mk_additionalnotes: data.additionalNotes,
 
     mk_urgency: mapUrgency(data.urgency).toString(),
@@ -126,6 +182,12 @@ export const mapServiceRequestPayload = (data, files = {}) => {
       mk_businessimpact: mapBusinessImpact(data.businessImpact).toString(),
     }),
   };
+
+  Object.keys(crmPayload).forEach((key) => {
+    if (crmPayload[key] === undefined || crmPayload[key] === null) {
+      delete crmPayload[key];
+    }
+  });
 
   const attachments = [];
 

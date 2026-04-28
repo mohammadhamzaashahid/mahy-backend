@@ -69,9 +69,38 @@ export function mapCustomerComplaintToCrm(form, files = []) {
     inconvenience_only: 124620003,
   };
 
+  const normalizeBusinessImpact = (value) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (!trimmed) return [];
+
+      if (trimmed.startsWith("[")) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          return Array.isArray(parsed) ? parsed : [trimmed];
+        } catch {
+          return [trimmed];
+        }
+      }
+
+      return [trimmed];
+    }
+
+    return [];
+  };
+
+  const rawBusinessImpact = form.businessImpact ?? form.mk_businessimpact;
+  const normalizedBusinessImpact = normalizeBusinessImpact(rawBusinessImpact);
+
   const businessImpactValue =
-    Array.isArray(form.businessImpact) && form.businessImpact.length
-      ? businessImpactMap[form.businessImpact[0]] ?? null
+    typeof rawBusinessImpact === "number"
+      ? rawBusinessImpact.toString()
+      : normalizedBusinessImpact.length
+      ? businessImpactMap[normalizedBusinessImpact[0]]?.toString() ??
+        (/^\d+$/.test(normalizedBusinessImpact[0])
+          ? normalizedBusinessImpact[0]
+          : null)
       : null;
 
   const payload = {
@@ -90,7 +119,7 @@ export function mapCustomerComplaintToCrm(form, files = []) {
     mk_serialno: form.serialNo || null,
     mk_invoiceno: form.invoiceNo || null,
 
-    mk_problemdescription: form.problemDescription,
+    mk_carproblemdescription: form.problemDescription,
 
     mk_incidentdate: form.incidentDate
       ? new Date(form.incidentDate).toISOString()

@@ -18,6 +18,8 @@ export const upload = multer({
       "audio/wav",
       "audio/mp4",
       "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
 
     if (!allowedTypes.includes(file.mimetype)) {
