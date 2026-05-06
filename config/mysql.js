@@ -3,10 +3,20 @@ dotenv.config();
 import mssql from 'mssql';
 import mysql from 'mysql2/promise';
 
+// const config = {
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   host: process.env.DB_SERVER,
+//   database: process.env.DB_NAME,
+//   waitForConnections: true,
+//   connectionLimit: 20,
+//   queueLimit: 0
+// };
+
 const config = {
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
-  host: process.env.DB_SERVER,
+  socketPath: '/tmp/mysql.sock',
   database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 20,

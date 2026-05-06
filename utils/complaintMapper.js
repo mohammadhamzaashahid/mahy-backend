@@ -119,7 +119,7 @@ export function mapCustomerComplaintToCrm(form, files = []) {
     mk_serialno: form.serialNo || null,
     mk_invoiceno: form.invoiceNo || null,
 
-    mk_carproblemdescription: form.problemDescription,
+    mk_problemdescription: form.problemDescription,
 
     mk_incidentdate: form.incidentDate
       ? new Date(form.incidentDate).toISOString()

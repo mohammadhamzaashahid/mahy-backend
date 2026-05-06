@@ -3,11 +3,13 @@ import { createLead } from "../services/crmLeadService.js";
 
 export async function submitLead(req, res) {
   try {
+    console.log("CRM lead frontend payload:", req.body);
+
     const formatted = formatCRMLead(req.body);
-    console.log(formatted);
+    console.log("CRM lead formatted payload:", formatted);
     
     const crmResponse = await createLead(formatted);
-    console.log(crmResponse);
+    console.log("CRM lead response:", crmResponse);
     
 
     res.json({ success: true, data: crmResponse });
