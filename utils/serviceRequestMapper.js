@@ -174,6 +174,7 @@ export const mapServiceRequestPayload = (data, files = {}) => {
     mk_year: data.carYear,
     mk_carproblemdescription: data.problemDescription,
     mk_additionalnotes: data.additionalNotes,
+    mk_problemdescription: data.problemDescription,
 
     mk_urgency: mapUrgency(data.urgency).toString(),
     mk_preferredvisit: mapPreferredVisit(data.preferredVisit).toString(),
@@ -206,6 +207,12 @@ export const mapServiceRequestPayload = (data, files = {}) => {
   console.log(crmPayload);
   return { crmPayload, attachments };
 };
+
+
+
+
+
+
 
 //   if (data.uploadPhotos?.length) {
 //     data.uploadPhotos.forEach((file) =>

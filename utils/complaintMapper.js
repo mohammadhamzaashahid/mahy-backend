@@ -110,6 +110,7 @@ export function mapCustomerComplaintToCrm(form, files = []) {
     mk_mobilenumber: form.mobileNumber,
 
     mah_source2: source2Map[form.source],
+    mah_complainreceiveddate: new Date().toISOString(),
 
     mk_complaintype: complaintTypeMap[form.complaintType],
     mk_productservices: form.productCategory,
